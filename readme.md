@@ -5,3 +5,4 @@ This is a collection of ULX commands coded by RTLK (Dark Ember, Lynx, Grif - all
 Currently includes:
 
 - Pointshop (givepoints, takepoints, setpoints, giveitem)
+- Cinema (skipvideo, seekvideo, resettheater)

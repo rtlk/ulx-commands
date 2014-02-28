@@ -39,6 +39,11 @@ function ulx.cinema_skip( calling_ply, target )
 		theater = getTheaterIndex(target) or calling_ply:GetTheater()
 	end
 	
+	if !theater then
+		ULib.tsayError( calling_ply, "There was an error! Are you in a theater?", true )
+		return
+	end
+	
 	if !theater:IsPlaying() then
 		ULib.tsayError( calling_ply, "There is no video playing.", true )
 		return
@@ -72,6 +77,11 @@ function ulx.cinema_seek( calling_ply, time, target )
 	
 	if target then
 		theater = getTheaterIndex(target) or calling_ply:GetTheater()
+	end
+	
+	if !theater then
+		ULib.tsayError( calling_ply, "There was an error! Are you in a theater?", true )
+		return
 	end
 	
 	if !theater:IsPlaying() then
@@ -108,6 +118,11 @@ function ulx.cinema_reset( calling_ply, target )
 	
 	if target then
 		theater = getTheaterIndex(target) or calling_ply:GetTheater()
+	end
+	
+	if !theater then
+		ULib.tsayError( calling_ply, "There was an error! Are you in a theater?", true )
+		return
 	end
 	
 	theater:Reset()

@@ -119,3 +119,37 @@ pointshop_giveitem:addParam{ type=ULib.cmds.StringArg, hint="item", completes=ul
 pointshop_giveitem:defaultAccess( ULib.ACCESS_SUPERADMIN )
 pointshop_giveitem:help( "Gives the target player(s) the specified pointshop item." )
 
+function ulx.pointshop_takeitem( calling_ply, target_plys, item )
+
+	if !PS then
+		ULib.tsayError( calling_ply, "Pointshop is not loaded. Cannot set points.", true )
+		return
+	end
+	
+	if !PS.Items[item] then
+		ULib.tsayError( calling_ply, "Cannot take item. Item \""..item.."\" invalid.", true )
+		return
+	end
+	
+	for k,v in pairs( target_plys ) do
+		if v:PS_HasItem(item) then
+			if v.PS_Items[item].Equipped then
+				v.PS_Items[item].Equipped = false
+				PS.Items[item]:OnHolster(v)
+			end
+			v:PS_TakeItem(item)
+		else
+			table.remove(target_plys,k)
+			ULib.tsayError( calling_ply, v:Name().." does not have "..item.."!", true )
+		end
+	end
+	
+	ulx.fancyLogAdmin( calling_ply, "#A took a #s from #T", item, target_plys )
+
+end
+local pointshop_takeitem = ulx.command( "Pointshop", "ulx takeitem", ulx.pointshop_takeitem, "!takeitem" )
+pointshop_takeitem:addParam{ type=ULib.cmds.PlayersArg }
+pointshop_takeitem:addParam{ type=ULib.cmds.StringArg, hint="item", completes=ulx.pointshop_item_list }
+pointshop_takeitem:defaultAccess( ULib.ACCESS_SUPERADMIN )
+pointshop_takeitem:help( "Takes away the target player(s) access to the specified pointshop item, forcing them to rebuy it." )
+

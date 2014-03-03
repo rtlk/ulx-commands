@@ -3,16 +3,18 @@ if CLIENT then
 	-- ULX XGUI Autocomplete hack
 	for i,m in pairs(xgui.modules.tab) do
 		if m.name == "Cmds" then
-			print("Loaded cmdModule for RTLK XGUI autocomplete hack")
 			cmdModule = xgui.modules.tab[i].panel
 		end
 	end
 	
 	local oldArgsList = cmdModule.buildArgsList
+	
 	cmdModule.plist.OnRowSelected = function(panel,line)
 		cmdModule.selectedPlayer = panel:GetLine(line).ply or false
 	end
+	
 	cmdModule.buildArgsList = function(cmd)
+		local oldCompletes = cmd.args[3].completes
 		if ( cmd.cmd == "ulx takeitem") then
 			local ulxPSitems = {}
 			for k,v in pairs(cmdModule.selectedPlayer.PS_Items) do
@@ -21,5 +23,6 @@ if CLIENT then
 			cmd.args[3].completes = ulxPSitems
 		end
 		oldArgsList(cmd)
+		cmd.args[3].completes = oldCompletes
 	end
 end

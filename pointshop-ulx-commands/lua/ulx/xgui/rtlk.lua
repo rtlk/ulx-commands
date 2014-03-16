@@ -14,15 +14,17 @@ if CLIENT then
 	end
 	
 	cmdModule.buildArgsList = function(cmd)
-		local oldCompletes = cmd.args[3].completes
-		if ( cmd.cmd == "ulx takeitem") then
-			local ulxPSitems = {}
-			for k,v in pairs(cmdModule.selectedPlayer.PS_Items) do
-				table.insert(ulxPSitems,k)
+		if cmd.args[3] and cmd.args[3].completes then
+			local oldCompletes = cmd.args[3].completes
+			if ( cmd.cmd == "ulx takeitem") then
+				local ulxPSitems = {}
+				for k,v in pairs(cmdModule.selectedPlayer.PS_Items) do
+					table.insert(ulxPSitems,k)
+				end
+				cmd.args[3].completes = ulxPSitems
 			end
-			cmd.args[3].completes = ulxPSitems
+			oldArgsList(cmd)
+			cmd.args[3].completes = oldCompletes
 		end
-		oldArgsList(cmd)
-		cmd.args[3].completes = oldCompletes
 	end
 end
